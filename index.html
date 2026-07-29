@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hermes — AI Trading OS</title>
+<meta name="description" content="An AI trading desk that runs on your own machine. It journals every trade, answers from your record, and never claims a trade was placed unless the broker confirmed it. Free 30-day beta.">
+<meta property="og:title" content="Hermes — AI Trading OS">
+<meta property="og:description" content="Trading. Reimagined. Let the evidence decide. Free 30-day beta for macOS and Windows.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="assets/hermes-emblem.png">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#06070b;color:#e9f1f7;font-family:'Instrument Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:#6fd3e6;text-decoration:none}a:hover{color:#c9a35c}
+::selection{background:rgba(201,163,92,.28)}
+@keyframes glassBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.006)}}
+@keyframes sheen{0%{background-position:130% 0}100%{background-position:-30% 0}}
+@keyframes haloBreath{0%,100%{opacity:.4}50%{opacity:.9}}
+input::placeholder{color:#54687a}
+</style>
+</helmet>
+
+<canvas id="hm-canvas" style="position:fixed;inset:0;width:100vw;height:100vh;z-index:0"></canvas>
+<div id="hm-light" style="position:fixed;inset:0;z-index:1;pointer-events:none"></div>
+
+<nav style="position:fixed;top:0;left:0;right:0;z-index:40;display:flex;align-items:center;justify-content:space-between;padding:22px 38px">
+  <span style="font-family:'Cinzel',serif;font-weight:500;font-size:15px;letter-spacing:.5em;color:#dcc9a0;text-shadow:0 1px 1px rgba(0,0,0,.6)">HERMES</span>
+  <div id="hm-dots" style="display:flex;gap:10px;align-items:center">
+    <sc-for list="{{ chapterDots }}" as="d" hint-placeholder-count="9">
+      <span title="{{ d.name }}" style="width:5px;height:5px;border-radius:50%;background:rgba(233,241,247,.22);display:block;transition:background .5s,transform .5s,box-shadow .5s"></span>
+    </sc-for>
+  </div>
+  <a href="#" onClick="{{ jumpToDownload }}" style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;color:#0b0c10;background:linear-gradient(160deg,#e2c07e,#c9a35c 55%,#9c7433);border-radius:99px;padding:10px 18px;box-shadow:0 0 26px rgba(201,163,92,.22)" style-hover="filter:brightness(1.12)">ACTIVATE</a>
+</nav>
+
+<div id="hm-stage" style="position:fixed;inset:0;z-index:10;perspective:1300px;perspective-origin:50% 44%">
+<div id="hm-world" style="position:absolute;inset:0;transform-style:preserve-3d;will-change:transform">
+
+<section data-ch="0" data-cam="forward" data-screen-label="Arrival" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;will-change:transform,opacity;transform-style:preserve-3d">
+  <div id="hm-relic" style="position:relative;width:min(52vh,470px);height:min(43vh,388px);display:flex;align-items:center;justify-content:center">
+    <div style="position:relative;width:88%;animation:glassBreath 11s ease-in-out infinite">
+      <img id="hm-emblem" src="assets/hermes-emblem.png" alt="Hermes" style="display:block;width:100%;filter:drop-shadow(0 34px 60px rgba(0,0,0,.55)) drop-shadow(0 0 42px rgba(201,163,92,.14)) saturate(.88) brightness(.97)"/>
+      <div id="hm-sheen" style="position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;-webkit-mask-image:url('assets/hermes-emblem.png');-webkit-mask-size:100% 100%;mask-image:url('assets/hermes-emblem.png');mask-size:100% 100%"></div>
+    </div>
+    <div style="position:absolute;left:50%;bottom:-9%;width:56%;height:12%;transform:translateX(-50%);background:radial-gradient(ellipse at center,rgba(0,0,0,.5),transparent 70%);filter:blur(6px)"></div>
+  </div>
+  <h1 id="hm-claim" style="margin:64px 0 0;font-family:'Cinzel',serif;font-size:36px;font-weight:400;letter-spacing:.24em;text-indent:.24em;opacity:0;color:transparent;background:linear-gradient(175deg,#e8d5a8 8%,#cbab72 46%,#a5854e 82%),linear-gradient(100deg,transparent 40%,rgba(255,244,218,.5) 50%,transparent 60%);background-blend-mode:screen;background-size:100% 100%,300% 100%;-webkit-background-clip:text;background-clip:text;animation:sheen 14s linear infinite;filter:drop-shadow(0 1px 1px rgba(0,0,0,.7)) drop-shadow(0 0 22px rgba(201,163,92,.1))">TRADING. REIMAGINED.</h1>
+  <p id="hm-support" style="margin:30px 0 0;font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;letter-spacing:.06em;color:rgba(226,208,175,.62);opacity:0;filter:drop-shadow(0 1px 1px rgba(0,0,0,.5))">Let the evidence decide.</p>
+</section>
+
+<section data-ch="1" data-cam="orbit" data-screen-label="Intelligence" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;will-change:transform,opacity;transform-style:preserve-3d">
+  <div style="max-width:820px;padding:0 38px;text-align:center">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.5em;color:#6fd3e6;margin-bottom:28px">I · INTELLIGENCE</div>
+    <h2 data-breathe style="margin:0 0 24px;font-size:54px;line-height:1.06;font-weight:600;letter-spacing:-.02em;text-wrap:balance;color:transparent;background:linear-gradient(100deg,#e9f1f7 40%,#fff 50%,#e9f1f7 60%);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;animation:sheen 9s linear infinite">It reads your record,<br/>not the market's mood.</h2>
+    <p style="margin:0 auto;font-size:17px;line-height:1.7;color:#8aa0b3;max-width:560px;text-wrap:pretty">Hermes imports your history and shows you a real analysis of your own trading before you configure a single thing. Every answer is computed from your trades — never invented.</p>
+    <div style="display:flex;gap:14px;justify-content:center;margin-top:42px;flex-wrap:wrap">
+      <div data-depth="1" style="animation:glassBreath 9s ease-in-out infinite;background:linear-gradient(170deg,rgba(255,255,255,.05),rgba(255,255,255,.015));backdrop-filter:blur(12px);border:1px solid rgba(201,163,92,.22);border-top-color:rgba(226,192,126,.4);border-radius:14px;padding:16px 22px;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#e9f1f7;box-shadow:0 18px 40px rgba(0,0,0,.4)">Worst hour · <span style="color:#e2c07e">14:00–15:00</span></div>
+      <div data-depth="2" style="animation:glassBreath 11s ease-in-out infinite;background:linear-gradient(170deg,rgba(255,255,255,.05),rgba(255,255,255,.015));backdrop-filter:blur(12px);border:1px solid rgba(148,197,233,.2);border-top-color:rgba(148,197,233,.4);border-radius:14px;padding:16px 22px;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#e9f1f7;box-shadow:0 18px 40px rgba(0,0,0,.4)">Strongest · <span style="color:#3fd6a0">XAUUSD +7.05</span></div>
+      <div data-depth="3" style="animation:glassBreath 10s ease-in-out infinite;background:linear-gradient(170deg,rgba(255,255,255,.05),rgba(255,255,255,.015));backdrop-filter:blur(12px);border:1px solid rgba(148,197,233,.2);border-top-color:rgba(148,197,233,.4);border-radius:14px;padding:16px 22px;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#e9f1f7;box-shadow:0 18px 40px rgba(0,0,0,.4)">Exposure · <span style="color:#6fd3e6">FLAT</span></div>
+    </div>
+  </div>
+</section>
+
+<section data-ch="2" data-cam="descend" data-screen-label="Memory" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;will-change:transform,opacity;transform-style:preserve-3d">
+  <div style="max-width:760px;padding:0 38px;text-align:center">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.5em;color:#6fd3e6;margin-bottom:28px">II · MEMORY</div>
+    <h2 data-breathe style="margin:0 0 24px;font-size:54px;line-height:1.06;font-weight:600;letter-spacing:-.02em">A desk that forgets nothing.</h2>
+    <p style="margin:0 auto;font-size:17px;line-height:1.7;color:#8aa0b3;max-width:560px">Every trade is journaled the moment it closes — entry, exit, context. No spreadsheets, no discipline required. Ask about last March and the answer comes from the record, on your machine, encrypted with your OS keychain.</p>
+  </div>
+</section>
+
+<section data-ch="3" data-cam="orbit" data-screen-label="Research LAB" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;will-change:transform,opacity;transform-style:preserve-3d">
+  <div style="max-width:760px;padding:0 38px;text-align:center">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.5em;color:#6fd3e6;margin-bottom:28px">III · RESEARCH LAB</div>
+    <h2 data-breathe style="margin:0 0 24px;font-size:54px;line-height:1.06;font-weight:600;letter-spacing:-.02em">Test the idea before the money.</h2>
+    <p style="margin:0 auto;font-size:17px;line-height:1.7;color:#8aa0b3;max-width:560px">The LAB runs your hypotheses against your own history. Market context comes from trusted sources and is tied back to what you actually hold — not a firehose of headlines.</p>
+  </div>
+</section>
+
+<section data-ch="4" data-cam="descend" data-screen-label="Voice" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;will-change:transform,opacity;transform-style:preserve-3d">
+  <div style="max-width:760px;padding:0 38px;text-align:center">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.5em;color:#6fd3e6;margin-bottom:28px">IV · VOICE</div>
+    <h2 data-breathe style="margin:0 0 30px;font-size:54px;line-height:1.06;font-weight:600;letter-spacing:-.02em">Hold Ctrl. Speak.</h2>
+    <div style="display:flex;flex-direction:column;gap:12px;max-width:520px;margin:0 auto 26px">
+      <sc-for list="{{ voiceLines }}" as="v" hint-placeholder-count="3">
+        <div data-depth="{{ $index }}" style="animation:glassBreath 10s ease-in-out infinite;background:linear-gradient(170deg,rgba(255,255,255,.05),rgba(255,255,255,.015));backdrop-filter:blur(12px);border:1px solid rgba(148,197,233,.16);border-left:2px solid rgba(201,163,92,.45);border-radius:13px;padding:15px 20px;font-size:15px;text-align:left;color:#e9f1f7;box-shadow:0 18px 40px rgba(0,0,0,.4)">“{{ v }}”</div>
+      </sc-for>
+    </div>
+    <p style="margin:0 auto;font-size:15px;line-height:1.65;color:#8aa0b3;max-width:520px">Every order is read back before anything is sent. Hermes never claims a trade was placed unless the broker confirmed it.</p>
+  </div>
+</section>
+
+<section data-ch="5" data-cam="forward" data-screen-label="Execution" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;will-change:transform,opacity;transform-style:preserve-3d">
+  <div style="max-width:760px;padding:0 38px;text-align:center">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.5em;color:#6fd3e6;margin-bottom:28px">V · EXECUTION</div>
+    <h2 data-breathe style="margin:0 0 24px;font-size:54px;line-height:1.06;font-weight:600;letter-spacing:-.02em">An assistant. Not a bot.</h2>
+    <p style="margin:0 auto 36px;font-size:17px;line-height:1.7;color:#8aa0b3;max-width:560px">Autonomous trading ships <strong style="color:#e9f1f7">off</strong>, behind a switch you must arm deliberately. The Risk Sentinel watches exposure, drawdown and account health in real time. cTrader, MT4, MT5 and OANDA.</p>
+    <div style="display:inline-flex;gap:12px;align-items:center;background:linear-gradient(170deg,rgba(226,192,126,.08),rgba(156,116,51,.04));backdrop-filter:blur(12px);border:1px solid rgba(201,163,92,.4);border-radius:99px;padding:13px 26px;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.24em;color:#e2c07e;box-shadow:0 0 40px rgba(201,163,92,.12)">AUTONOMY · OFF BY DEFAULT</div>
+  </div>
+</section>
+
+<section data-ch="6" data-cam="orbit" data-screen-label="Evidence" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;will-change:transform,opacity;transform-style:preserve-3d">
+  <div style="max-width:880px;padding:0 38px;text-align:center">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.5em;color:#6fd3e6;margin-bottom:28px">VI · EVIDENCE</div>
+    <h2 data-breathe style="margin:0 0 36px;font-size:54px;line-height:1.06;font-weight:600;letter-spacing:-.02em">Built on things you can verify.</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;text-align:left">
+      <sc-for list="{{ evidence }}" as="e" hint-placeholder-count="3">
+        <div data-depth="{{ $index }}" style="animation:glassBreath 12s ease-in-out infinite;background:linear-gradient(170deg,rgba(255,255,255,.045),rgba(255,255,255,.012));backdrop-filter:blur(12px);border:1px solid rgba(148,197,233,.14);border-top:1px solid rgba(226,192,126,.35);border-radius:16px;padding:24px;box-shadow:0 24px 50px rgba(0,0,0,.45)">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.3em;color:#e2c07e;margin-bottom:12px">{{ e.tag }}</div>
+          <p style="margin:0;font-size:14px;line-height:1.65;color:#aebfcd">{{ e.body }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<section data-ch="7" data-cam="descend" data-screen-label="Future" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;will-change:transform,opacity;transform-style:preserve-3d">
+  <div style="max-width:640px;padding:0 38px;text-align:center">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.5em;color:#6fd3e6;margin-bottom:28px">VII · FUTURE</div>
+    <h2 data-breathe style="margin:0 0 32px;font-size:54px;line-height:1.06;font-weight:600;letter-spacing:-.02em">Under active development.</h2>
+    <div style="display:flex;flex-direction:column;text-align:left">
+      <sc-for list="{{ roadmap }}" as="r" hint-placeholder-count="6">
+        <div style="display:flex;gap:16px;padding:12px 0;border-bottom:1px solid rgba(148,197,233,.09);align-items:baseline">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.18em;color:#c9a35c;flex:none;width:64px">{{ r.tag }}</span>
+          <span style="font-size:14.5px;line-height:1.55;color:#cdd9e2">{{ r.text }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<section data-ch="8" data-cam="forward" data-screen-label="Control Room" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;will-change:transform,opacity;transform-style:preserve-3d">
+  <div style="max-width:680px;padding:0 38px;text-align:center;width:100%">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.5em;color:#3fd6a0;margin-bottom:28px">● SYSTEM READY</div>
+    <h2 data-breathe style="margin:0 0 16px;font-size:54px;line-height:1.06;font-weight:600;letter-spacing:-.02em;color:transparent;background:linear-gradient(100deg,#e9f1f7 35%,#f2e3c0 50%,#e9f1f7 65%);background-size:280% 100%;-webkit-background-clip:text;background-clip:text;animation:sheen 8s linear infinite">Activate Hermes.</h2>
+    <p style="margin:0 auto 36px;font-size:16px;line-height:1.65;color:#8aa0b3;max-width:480px">30 days. No card. Your licence covers two machines. Enter your email for the beta and release updates.</p>
+    <sc-if value="{{ notSubmitted }}" hint-placeholder-val="{{ true }}">
+      <form onSubmit="{{ submitEmail }}" style="display:flex;gap:12px;max-width:460px;margin:0 auto">
+        <input type="email" required placeholder="you@yourdesk.com" value="{{ email }}" onChange="{{ setEmail }}" style="flex:1;background:rgba(255,255,255,.04);backdrop-filter:blur(12px);border:1px solid rgba(148,197,233,.26);border-radius:12px;padding:14px 18px;font-size:15px;color:#e9f1f7;font-family:'Instrument Sans',sans-serif;outline:none" style-focus="border-color:#e2c07e"/>
+        <button type="submit" style="font-size:14px;font-weight:600;color:#0b0c10;background:linear-gradient(160deg,#e2c07e,#c9a35c 55%,#9c7433);border:none;border-radius:12px;padding:14px 26px;cursor:pointer;font-family:'Instrument Sans',sans-serif;letter-spacing:.02em;box-shadow:0 0 34px rgba(201,163,92,.25)" style-hover="filter:brightness(1.12)">Activate</button>
+      </form>
+    </sc-if>
+    <sc-if value="{{ submitted }}" hint-placeholder-val="{{ false }}">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;text-align:left">
+        <a href="https://github.com/DanErhan/Hermes-Releases/releases/latest" target="_blank" rel="noopener" style="background:rgba(255,255,255,.04);backdrop-filter:blur(12px);border:1px solid rgba(148,197,233,.26);border-radius:15px;padding:20px;color:#e9f1f7" style-hover="border-color:#e2c07e">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.26em;color:#6fd3e6;margin-bottom:8px">MACOS · APPLE SILICON</div>
+          <div style="font-size:15px;font-weight:600;margin-bottom:6px">Hermes-mac-arm64.dmg ↓</div>
+          <div style="font-size:12.5px;line-height:1.5;color:#8aa0b3">First launch: right-click → Open, once.</div>
+        </a>
+        <a href="https://github.com/DanErhan/Hermes-Releases/releases/latest" target="_blank" rel="noopener" style="background:rgba(255,255,255,.04);backdrop-filter:blur(12px);border:1px solid rgba(148,197,233,.26);border-radius:15px;padding:20px;color:#e9f1f7" style-hover="border-color:#e2c07e">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.26em;color:#6fd3e6;margin-bottom:8px">WINDOWS 10/11 · X64</div>
+          <div style="font-size:15px;font-weight:600;margin-bottom:6px">Hermes-win-x64.exe ↓</div>
+          <div style="font-size:12.5px;line-height:1.5;color:#8aa0b3">SmartScreen: More info → Run anyway.</div>
+        </a>
+        <div style="grid-column:1/-1;font-size:12px;color:#54687a;text-align:center">Unsigned beta — the first-run warning means “unknown publisher”, not “something wrong”.</div>
+      </div>
+    </sc-if>
+    <div style="margin-top:46px;display:flex;gap:26px;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.22em">
+      <a href="https://discord.gg/QQGWCb4Bv" target="_blank" rel="noopener" style="color:#8aa0b3" style-hover="color:#e2c07e">DISCORD</a>
+      <a href="https://github.com/DanErhan/Hermes-Releases/issues" target="_blank" rel="noopener" style="color:#8aa0b3" style-hover="color:#e2c07e">ISSUES</a>
+      <span style="color:#54687a">© 2026 DAN ERHAN</span>
+    </div>
+  </div>
+</section>
+
+</div>
+</div>
+
+<div id="hm-track" style="height:1270vh"></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;reduceMotion&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Motion&quot;}}">
+class Component extends DCLogic {
+  state = { email: "", submitted: false };
+  componentDidMount() {
+    const CH = 9, VH_PER = 130;
+    const reduce = this.props.reduceMotion ?? false;
+    document.getElementById("hm-track").style.height = (CH - 1) * VH_PER + 100 + "vh";
+    const secs = Array.from(document.querySelectorAll("[data-ch]"));
+    const world = document.getElementById("hm-world");
+    const relic = document.getElementById("hm-relic");
+    const dots = Array.from(document.querySelectorAll("#hm-dots span"));
+    const canvas = document.getElementById("hm-canvas");
+    const ctx = canvas.getContext("2d");
+    let W, H, DPR; const fit = () => { DPR = Math.min(devicePixelRatio, 2); W = canvas.width = innerWidth * DPR; H = canvas.height = innerHeight * DPR; };
+    fit(); addEventListener("resize", fit);
+    // --- particles: each has a free drift position and a "relic ring" home for the arrival assembly
+    const N = 130;
+    const P = Array.from({ length: N }, (_, i) => {
+      const a = (i / N) * Math.PI * 2;
+      return { fx: Math.random(), fy: Math.random(), a, ring: .24 + (i % 3) * .035,
+        z: .3 + Math.random() * .7, vx: (Math.random() - .5) * .0001, vy: (Math.random() - .5) * .0001, r: .6 + Math.random() * 1.7 };
+    });
+    // --- edge architecture: greek key unit (normalized u across strip, v down)
+    const KEY = [[0,0],[1,0],[1,.55],[.35,.55],[.35,.3],[.68,.3],[.68,.85],[0,.85],[0,1]];
+    // constellation points per edge
+    const CONST = Array.from({ length: 26 }, (_, i) => ({ side: i % 2, y: Math.random(), x: Math.random(), tw: Math.random() * 6 }));
+    let cur = 0, target = 0, mx = 0, my = 0, tmx = 0, tmy = 0, t = 0;
+    const born = performance.now();
+    const onScroll = () => { target = scrollY / (innerHeight * VH_PER / 100); };
+    const onMouse = (e) => { tmx = e.clientX / innerWidth - .5; tmy = e.clientY / innerHeight - .5; };
+    addEventListener("scroll", onScroll, { passive: true });
+    addEventListener("mousemove", onMouse, { passive: true });
+    onScroll();
+    this._jump = () => scrollTo({ top: (CH - 1) * innerHeight * VH_PER / 100, behavior: reduce ? "auto" : "smooth" });
+    const ease = (x) => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+    const NAMES = ["ARRIVAL", "INTELLIGENCE", "MEMORY", "RESEARCH LAB", "VOICE", "EXECUTION", "EVIDENCE", "FUTURE", "CONTROL ROOM"];
+    const stroke = (c, w) => { ctx.strokeStyle = c; ctx.lineWidth = (w || 1) * DPR; ctx.stroke(); };
+    const bronze = (a) => `rgba(226,192,126,${a.toFixed(3)})`;
+    const blue = (a) => `rgba(111,211,230,${a.toFixed(3)})`;
+    // one symbolic object per room — chapters collapse into these, and emerge from them
+    const SYM = [
+      (a, R) => { // compass — arrival
+        for (let k = 0; k < 3; k++) { ctx.beginPath(); ctx.arc(0, 0, R * (.5 + k * .25), 0, 7); stroke(bronze(a * .5)); }
+        for (let k = 0; k < 8; k++) { const an = k * Math.PI / 4 + t * .1; ctx.beginPath(); ctx.moveTo(Math.cos(an) * R * .3, Math.sin(an) * R * .3); ctx.lineTo(Math.cos(an) * R, Math.sin(an) * R); stroke(blue(a * .35)); }
+      },
+      (a, R) => { // neural web — intelligence
+        const n = []; for (let k = 0; k < 12; k++) { const an = k * 2.4 + t * .12, rr = R * (.35 + ((k * 37) % 10) / 16); n.push([Math.cos(an) * rr, Math.sin(an) * rr]); }
+        n.forEach((p, k) => { const q2 = n[(k + 3) % 12], q3 = n[(k + 5) % 12];
+          ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.lineTo(q2[0], q2[1]); stroke(blue(a * .3));
+          ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.lineTo(q3[0], q3[1]); stroke(blue(a * .16));
+          ctx.beginPath(); ctx.arc(p[0], p[1], 2.4 * DPR, 0, 7); ctx.fillStyle = bronze(a * .8); ctx.fill(); });
+      },
+      (a, R) => { // nested meander squares — memory
+        for (let k = 0; k < 4; k++) { ctx.save(); ctx.rotate((k % 2 ? Math.PI / 4 : 0) + t * .06); const s2 = R * (1.5 - k * .3); ctx.strokeStyle = k % 2 ? blue(a * .3) : bronze(a * .45); ctx.lineWidth = DPR; ctx.strokeRect(-s2 / 2, -s2 / 2, s2, s2); ctx.restore(); }
+      },
+      (a, R) => { // measured diagram, columns become chart bars — research
+        ctx.beginPath(); ctx.moveTo(-R, R * .6); ctx.lineTo(R, R * .6); stroke(bronze(a * .4));
+        for (let k = 0; k < 6; k++) { const h2 = R * (.25 + ((k * 53) % 7) / 8), x2 = -R * .8 + k * R * .32;
+          ctx.beginPath(); ctx.moveTo(x2, R * .6); ctx.lineTo(x2, R * .6 - h2); stroke(k % 2 ? blue(a * .4) : bronze(a * .5), 2); }
+        ctx.beginPath(); let r2 = R * .1; for (let th = 0; th < 4.6; th += .1) { r2 *= 1.035; const x3 = Math.cos(th + t * .1) * r2, y3 = Math.sin(th + t * .1) * r2 - R * .1; th ? ctx.lineTo(x3, y3) : ctx.moveTo(x3, y3); } stroke(blue(a * .3));
+      },
+      (a, R) => { // sound waves — voice
+        for (let k = 0; k < 3; k++) { ctx.beginPath(); for (let x2 = -R * 1.2; x2 <= R * 1.2; x2 += 6 * DPR) { const y2 = Math.sin(x2 / R * (3 + k) + t * (1.2 + k * .3)) * R * (.24 - k * .06); x2 === -R * 1.2 ? ctx.moveTo(x2, y2) : ctx.lineTo(x2, y2); } stroke(k ? blue(a * (.35 - k * .1)) : bronze(a * .5)); }
+      },
+      (a, R) => { // machined ring — execution
+        ctx.setLineDash([R * .18, R * .07]); ctx.beginPath(); ctx.arc(0, 0, R * .8, t * .15, t * .15 + 7); stroke(bronze(a * .55), 3); ctx.setLineDash([]);
+        ctx.beginPath(); ctx.arc(0, 0, R * .5, 0, 7); stroke(blue(a * .35));
+        ctx.beginPath(); ctx.arc(0, 0, R * .08, 0, 7); ctx.fillStyle = bronze(a * .8); ctx.fill();
+      },
+      (a, R) => { // carved stone shards, blue light in the seams — evidence
+        for (let k = 0; k < 6; k++) { const a0 = k * Math.PI / 3 + t * .04; ctx.beginPath(); ctx.arc(0, 0, R * .75, a0 + .12, a0 + Math.PI / 3 - .12); stroke(bronze(a * .55), 4);
+          const am = a0 + Math.PI / 3; ctx.beginPath(); ctx.moveTo(Math.cos(am) * R * .55, Math.sin(am) * R * .55); ctx.lineTo(Math.cos(am) * R * .95, Math.sin(am) * R * .95); stroke(blue(a * (.4 + .25 * Math.sin(t * 2 + k)))); }
+      },
+      (a, R) => { // constellation path — future
+        const pts = [[-1, .5], [-.55, .1], [-.15, .35], [.2, -.15], [.55, .1], [.9, -.35]].map((p) => [p[0] * R, p[1] * R]);
+        ctx.beginPath(); pts.forEach((p, k) => k ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); stroke(blue(a * .35));
+        pts.forEach((p) => { ctx.beginPath(); ctx.arc(p[0], p[1], 2.6 * DPR, 0, 7); ctx.fillStyle = bronze(a * .85); ctx.fill(); });
+      },
+      (a, R) => { // the core opens its wings — control room
+        ctx.beginPath(); ctx.arc(0, 0, R * .12, 0, 7); ctx.fillStyle = bronze(a * .9); ctx.fill();
+        ctx.beginPath(); ctx.arc(0, 0, R * .45, 0, 7); stroke(blue(a * .4));
+        for (const s2 of [-1, 1]) { ctx.beginPath(); ctx.moveTo(s2 * R * .18, 0); ctx.bezierCurveTo(s2 * R * .7, -R * .5, s2 * R * 1.1, -R * .25, s2 * R * 1.2, -R * .55); stroke(bronze(a * .6), 2);
+          ctx.beginPath(); ctx.moveTo(s2 * R * .18, R * .08); ctx.bezierCurveTo(s2 * R * .6, -R * .2, s2 * R * .9, -R * .05, s2 * R * 1.0, -R * .28); stroke(bronze(a * .35)); }
+      }
+    ];
+    const loop = () => {
+      this._raf = requestAnimationFrame(loop);
+      try {
+      t += .016;
+      cur += (target - cur) * (reduce ? 1 : .06);
+      mx += (tmx - mx) * .045; my += (tmy - my) * .045;
+      const arrive = reduce ? 1 : Math.min(1, (performance.now() - born) / 2600); // relic assembly 0→1
+      const ea = ease(arrive);
+      if (relic) {
+        relic.style.opacity = ea.toFixed(3);
+        relic.style.transform = `translate(${(mx * -16).toFixed(1)}px,${(my * -11).toFixed(1)}px) scale(${(.9 + ea * .1).toFixed(3)})`;
+        relic.style.filter = `blur(${((1 - ea) * 12).toFixed(1)}px)`;
+        const emb = document.getElementById("hm-emblem"), sheen = document.getElementById("hm-sheen");
+        if (emb) { const dis = Math.min(1, Math.max(0, cur * 1.8)); // on scroll the emblem pales into blueprint line-art
+          emb.style.filter = `drop-shadow(${(-mx * 22).toFixed(1)}px ${(30 - my * 18).toFixed(1)}px 58px rgba(0,0,0,${(.5 * (1 - dis)).toFixed(2)})) drop-shadow(0 0 42px rgba(201,163,92,${(.14 * (1 - dis)).toFixed(3)})) saturate(${(.88 - dis * .6).toFixed(2)}) brightness(${(.97 + dis * .5 + Math.abs(mx) * .05).toFixed(2)})`; }
+        if (sheen) { // cursor-driven light: a warm key light follows the mouse, a cool rim answers from the opposite side
+          const lxp = 50 + mx * 70, lyp = 44 + my * 60;
+          sheen.style.opacity = (ea * (1 - Math.min(1, cur * 2))).toFixed(3);
+          sheen.style.background = `radial-gradient(42% 42% at ${lxp.toFixed(1)}% ${lyp.toFixed(1)}%, rgba(255,238,204,.32), rgba(226,192,126,.1) 45%, transparent 72%), radial-gradient(50% 50% at ${(100 - lxp).toFixed(1)}% ${(100 - lyp).toFixed(1)}%, rgba(120,170,225,.12), transparent 65%)`;
+        }
+      }
+      world.style.transform = `rotateY(${mx * (reduce ? 0 : 3.5)}deg) rotateX(${-my * (reduce ? 0 : 2.5)}deg)`;
+      // one continuous light field across the whole page, emanating from the emblem, leaning toward the cursor
+      const light = document.getElementById("hm-light");
+      if (light) {
+        const arrK = reduce ? 1 : Math.min(1, (performance.now() - born) / 2600);
+        const p2 = cur / (CH - 1), gold2 = Math.max(0, p2 - .7) / .3;
+        const kx = 50 + mx * 16, ky = 42 + my * 12 - Math.min(cur, 1) * 8; // key light follows the hand
+        const warm = .085 * arrK * (1 - Math.min(1, Math.abs(mx) + Math.abs(my)) * .2);
+        light.style.background =
+          `radial-gradient(90% 75% at ${kx.toFixed(1)}% ${ky.toFixed(1)}%, rgba(${Math.round(185 + gold2 * 40)},${Math.round(150 + gold2 * 15)},${Math.round(95 - gold2 * 20)},${warm.toFixed(3)}), transparent 62%),` +
+          `radial-gradient(110% 95% at ${(100 - kx).toFixed(1)}% ${(96 - ky).toFixed(1)}%, rgba(66,105,168,${(.05 * arrK).toFixed(3)}), transparent 60%)`;
+      }
+      // staged hero: emblem first, a pause, then the manifesto, then its supporting line
+      const claim = document.getElementById("hm-claim"), support = document.getElementById("hm-support");
+      const el2 = performance.now() - born;
+      // ceremonial reveal: not a fade-slide — the inscriptions resolve as if light is finding them in stone
+      if (claim) { const k = reduce ? 1 : ease(Math.min(1, Math.max(0, (el2 - 2600) / 1500)));
+        claim.style.opacity = k.toFixed(3);
+        claim.style.letterSpacing = (.24 + (1 - k) * .1) + "em";
+        claim.style.filter = `blur(${((1 - k) * 5).toFixed(1)}px) drop-shadow(0 1px 1px rgba(0,0,0,.7)) drop-shadow(0 0 22px rgba(201,163,92,${(.1 * k).toFixed(3)}))`; }
+      if (support) { const k = reduce ? 1 : ease(Math.min(1, Math.max(0, (el2 - 3600) / 1200)));
+        support.style.opacity = k.toFixed(3);
+        support.style.filter = `blur(${((1 - k) * 3).toFixed(1)}px) drop-shadow(0 1px 1px rgba(0,0,0,.5))`; }
+      // ceremonial pacing: dwell inside each room, glide through the gate between them
+      const base = Math.min(CH - 1, Math.floor(Math.max(0, cur))), g = Math.min(1, Math.max(0, cur - base));
+      // double-dwell: pauses inside each room AND at mid-gate, so the morph can be appreciated
+      const ss = (x) => x * x * (3 - 2 * x);
+      const gs = g < .5 ? .5 * ss(g * 2) : .5 + .5 * ss(g * 2 - 1);
+      const sp = base + gs;
+      // gate holds the stage ONLY while no room typography is visible — suppress it as soon as a chapter shows
+      const visL = Math.max(0, 1 - gs * 2.3), visE = Math.max(0, 1 - (1 - gs) * 2.3);
+      const gateAmt = Math.max(0, 1 - Math.abs(gs - .5) * 2.4) * Math.max(0, 1 - Math.max(visL, visE) * 1.35);
+      secs.forEach((s, i) => {
+        const d = i - sp, ad = Math.abs(d);
+        const vis = Math.max(0, 1 - ad * 2.3); // one room at a time — typography never overlaps
+        s.style.opacity = vis.toFixed(3);
+        const cam = s.dataset.cam;
+        let tf = `translateZ(${(-ad * 620).toFixed(1)}px) scale(${(1 - ad * .12).toFixed(3)})`;
+        if (cam === "orbit") tf += ` rotateY(${(d * 16).toFixed(2)}deg)`;
+        else if (cam === "descend") tf += ` translateY(${(d * 200).toFixed(1)}px)`;
+        else tf += ` rotateX(${(d * 4).toFixed(2)}deg)`;
+        s.style.transform = tf;
+        s.style.filter = vis > 0 && vis < .9 ? `blur(${((1 - vis) * 8).toFixed(1)}px)` : "none";
+        s.style.pointerEvents = ad < .3 ? "auto" : "none";
+        s.style.visibility = vis <= 0 ? "hidden" : "visible";
+        if (vis > 0) {
+          const h = s.querySelector("[data-breathe]");
+          if (h && !reduce) {
+            if (!h.dataset.ls) h.dataset.ls = getComputedStyle(h).letterSpacing;
+            h.style.letterSpacing = (parseFloat(h.dataset.ls) || 0) + Math.abs(d) * 7 + "px";
+          }
+          s.querySelectorAll("[data-depth]").forEach((c) => {
+            const k = (+c.dataset.depth % 3) + 1;
+            c.style.translate = `${(mx * k * -12).toFixed(1)}px ${(my * k * -9).toFixed(1)}px`;
+          });
+        }
+      });
+      const active = Math.round(cur);
+      dots.forEach((dot, i) => {
+        const on = i === active;
+        dot.style.background = on ? "#e2c07e" : "rgba(233,241,247,.22)";
+        dot.style.transform = on ? "scale(1.6)" : "scale(1)";
+        dot.style.boxShadow = on ? "0 0 10px rgba(226,192,126,.7)" : "none";
+      });
+      // ================= CANVAS =================
+      ctx.clearRect(0, 0, W, H);
+      if (reduce) return;
+      const p = cur / (CH - 1);
+      const gold = Math.max(0, p - .7) / .3;
+      // volumetric light column that travels down as you descend
+      const lx = W / 2 + mx * W * .04, ly = H * (.42 + Math.sin(cur * .7) * .06);
+      const glow = ctx.createRadialGradient(lx, ly, 0, lx, ly, Math.max(W, H) * .55);
+      glow.addColorStop(0, `rgba(${Math.round(38 + gold * 160)},${Math.round(86 + gold * 70)},${Math.round(168 - gold * 100)},${.13 + Math.sin(t * .4) * .02})`);
+      glow.addColorStop(1, "rgba(6,7,11,0)");
+      ctx.fillStyle = glow; ctx.fillRect(0, 0, W, H);
+      // golden-ratio compass rings
+      const PHI = 1.618;
+      for (let i = 0; i < 4; i++) {
+        const r = H * .13 * Math.pow(PHI, i) * (1 + p * .3);
+        ctx.beginPath();
+        ctx.arc(lx, ly, r, t * .04 * (i % 2 ? 1 : -1) + cur * .5, t * .04 * (i % 2 ? 1 : -1) + cur * .5 + Math.PI * 1.35);
+        ctx.strokeStyle = `rgba(${140 + gold * 86},${190 - gold * 27},${215 - gold * 123},${.05 - i * .008})`;
+        ctx.lineWidth = DPR; ctx.stroke();
+      }
+      // --- living edges: meander ⇄ data-stream morph (continuous, breathing)
+      const morph = (Math.sin(cur * .85 + 1.2) + 1) / 2; // 0 = engraved key, 1 = flowing data
+      const stripW = 26 * DPR, unitH = 46 * DPR;
+      [0, 1].forEach((side) => {
+        const bx = side === 0 ? 34 * DPR : W - 34 * DPR;
+        const dir = side === 0 ? 1 : -1;
+        const scrollOff = (cur * unitH * 2.2 + t * 4 * DPR) % unitH;
+        ctx.beginPath();
+        const units = Math.ceil(H / unitH) + 2;
+        for (let u = -1; u < units; u++) {
+          KEY.forEach((pt, j) => {
+            const vy = (u + pt[1]) * unitH - scrollOff;
+            const keyX = bx + dir * pt[0] * stripW;
+            const flowX = bx + dir * (Math.sin(vy / H * 9 + t * .7 + side * 2) * .5 + .5) * stripW;
+            const x = keyX + (flowX - keyX) * morph;
+            if (u === -1 && j === 0) ctx.moveTo(x, vy); else ctx.lineTo(x, vy);
+          });
+        }
+        ctx.strokeStyle = `rgba(${Math.round(201 - morph * 90)},${Math.round(163 + morph * 48)},${Math.round(92 + morph * 138)},${(.10 + Math.sin(t * .6 + side) * .03).toFixed(3)})`;
+        ctx.lineWidth = DPR;
+        ctx.setLineDash(morph > .55 ? [6 * DPR, 10 * DPR] : []);
+        ctx.lineDashOffset = -t * 40 * DPR;
+        ctx.stroke(); ctx.setLineDash([]);
+        // light traveling along the engraving
+        const beadY = ((t * .09 + side * .5) % 1) * H;
+        const bead = ctx.createRadialGradient(bx, beadY, 0, bx, beadY, 60 * DPR);
+        bead.addColorStop(0, "rgba(226,192,126,.16)"); bead.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = bead; ctx.fillRect(bx - 60 * DPR, beadY - 60 * DPR, 120 * DPR, 120 * DPR);
+      });
+      // constellation geometry near the edges
+      const cpts = CONST.map((c) => ({
+        x: (c.side === 0 ? .04 + c.x * .09 : .87 + c.x * .09) * W,
+        y: ((c.y + cur * .05) % 1) * H, tw: c.tw
+      }));
+      cpts.forEach((a, i) => {
+        ctx.beginPath(); ctx.arc(a.x, a.y, (1 + Math.sin(t + a.tw) * .4) * DPR, 0, 7);
+        ctx.fillStyle = "rgba(233,241,247,.28)"; ctx.fill();
+        for (let j = i + 1; j < cpts.length; j++) {
+          const b = cpts[j], dx = a.x - b.x, dy = a.y - b.y, dist = Math.hypot(dx, dy);
+          if (dist < H * .13) {
+            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
+            ctx.strokeStyle = `rgba(148,197,233,${(.07 * (1 - dist / (H * .13))).toFixed(3)})`;
+            ctx.lineWidth = DPR * .6; ctx.stroke();
+          }
+        }
+      });
+      // particles: assemble into the relic ring on arrival, release as you descend
+      const hold = Math.max(0, 1 - cur * 2.4) * ea;
+      const ringR = Math.min(W, H) * .001 * 300;
+      P.forEach((pt) => {
+        pt.fx = (pt.fx + pt.vx + 1) % 1; pt.fy = (pt.fy + pt.vy - .00003 + 1) % 1;
+        const freeX = pt.fx * W, freeY = ((pt.fy + cur * .035 * pt.z) % 1) * H;
+        const homeX = W / 2 + Math.cos(pt.a + t * .12) * ringR * (pt.ring / .24);
+        const homeY = H * .42 + Math.sin(pt.a + t * .12) * ringR * (pt.ring / .24);
+        const x = freeX + (homeX - freeX) * hold + mx * pt.z * -36 * DPR;
+        const y = freeY + (homeY - freeY) * hold + my * pt.z * -26 * DPR;
+        ctx.beginPath(); ctx.arc(x, y, pt.r * pt.z * DPR, 0, 7);
+        ctx.fillStyle = `rgba(${Math.round(175 + gold * 55 + hold * 50)},${Math.round(198 - gold * 30)},${Math.round(222 - gold * 100 - hold * 60)},${(.09 + pt.z * .15 + hold * .1).toFixed(3)})`;
+        ctx.fill();
+      });
+      // ===== THE GATE: between rooms, one symbolic object holds the stage and becomes the next =====
+      if (gateAmt > .015 && base < CH - 1) {
+        const gx = W / 2 + mx * W * .035, gy = H * .44 + my * H * .025 + (gs - .5) * H * .05;
+        const R = Math.min(W, H) * .22;
+        const q = Math.min(1, Math.max(0, (gs - .32) / .36)); // 0 = previous symbol, 1 = next
+        ctx.save(); ctx.translate(gx, gy);
+        ctx.save(); ctx.rotate(-q * .7); ctx.scale(1 - q * .55, 1 - q * .55); SYM[base](gateAmt * (1 - q), R); ctx.restore();
+        ctx.save(); ctx.rotate((1 - q) * .7); ctx.scale(.45 + q * .55, .45 + q * .55); SYM[base + 1](gateAmt * q, R); ctx.restore();
+        // golden dust orbit — the messenger carries you across
+        for (let k = 0; k < 26; k++) { const an = k / 26 * Math.PI * 2 + t * .5; const rr = R * (1.25 + Math.sin(k * 3 + t) * .08);
+          ctx.beginPath(); ctx.arc(Math.cos(an) * rr, Math.sin(an) * rr * .42, (1 + (k % 3)) * DPR * .7, 0, 7);
+          ctx.fillStyle = bronze(gateAmt * (.14 + .1 * Math.sin(t * 2 + k))); ctx.fill(); }
+        // expanding engraved frame — sacred proportions revealing the next chamber
+        const fw = R * (2.2 + gateAmt * .5), fh = fw / 1.618;
+        ctx.strokeStyle = bronze(gateAmt * .14); ctx.lineWidth = DPR;
+        ctx.strokeRect(-fw / 2, -fh / 2, fw, fh);
+        for (const [sx, sy] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) { // meander corner ticks
+          ctx.beginPath(); ctx.moveTo(sx * fw / 2, sy * (fh / 2 - 14 * DPR)); ctx.lineTo(sx * fw / 2, sy * fh / 2); ctx.lineTo(sx * (fw / 2 - 14 * DPR), sy * fh / 2);
+          stroke(bronze(gateAmt * .35)); }
+        // the name of the chamber ahead — engraved architectural heading
+        ctx.font = `600 ${15 * DPR}px 'JetBrains Mono', monospace`; ctx.textAlign = "center";
+        try { ctx.letterSpacing = `${9 * DPR}px`; } catch (_) {}
+        ctx.fillStyle = `rgba(233,241,247,${(gateAmt * q * .6).toFixed(3)})`;
+        ctx.fillText(NAMES[base + 1], 4.5 * DPR, R * 1.52);
+        ctx.fillStyle = bronze(gateAmt * q * .5);
+        ctx.fillRect(-R * .35, R * 1.52 + 12 * DPR, R * .7, DPR); // carved rule beneath
+        try { ctx.letterSpacing = "0px"; } catch (_) {}
+        ctx.restore();
+      }
+      } catch (_) { /* one bad frame must never kill the page */ }
+    };
+    loop();
+    this._cleanup = () => { cancelAnimationFrame(this._raf); removeEventListener("scroll", onScroll); removeEventListener("mousemove", onMouse); removeEventListener("resize", fit); };
+  }
+  componentWillUnmount() { if (this._cleanup) this._cleanup(); }
+  renderVals() {
+    return {
+      chapterDots: ["Arrival", "Intelligence", "Memory", "Research LAB", "Voice", "Execution", "Evidence", "Future", "Control Room"].map((name) => ({ name })),
+      jumpToDownload: (e) => { e.preventDefault(); if (this._jump) this._jump(); },
+      email: this.state.email,
+      setEmail: (e) => this.setState({ email: e.target.value }),
+      submitted: this.state.submitted,
+      notSubmitted: !this.state.submitted,
+      submitEmail: (e) => {
+        e.preventDefault();
+        const em = (this.state.email || "").trim();
+        this.setState({ submitted: true });
+        if (em) {
+          try {
+            fetch("https://hermes-licence-production.up.railway.app/interest", {
+              method: "POST",
+              headers: { "Content-Type": "text/plain" },   // simple request — no preflight
+              body: JSON.stringify({ email: em, source: "site" })
+            }).catch(() => {});
+          } catch (_) {}
+        }
+      },
+      voiceLines: [
+        "What's my worst hour of the day?",
+        "How did I do on gold this month?",
+        "Short gold, one percent risk, forty pip stop."
+      ],
+      evidence: [
+        { tag: "LOCAL-FIRST", body: "Everything lives on your machine. Broker credentials and API keys are encrypted with a key from your OS keychain. Nothing about your hardware is transmitted." },
+        { tag: "YOUR KEYS", body: "Bring your own Anthropic, OpenAI, Google or ElevenLabs keys — Hermes uses your accounts, never anyone else's. Skip them and it still works." },
+        { tag: "PLAIN TRUTH", body: "It tells you plainly when something did not happen, and never claims a trade was placed unless the broker confirmed it." }
+      ],
+      roadmap: [
+        { tag: "BROKER", text: "Native cTrader API connectivity — pending Spotware approval." },
+        { tag: "MACOS", text: "Intel Mac support." },
+        { tag: "TRUST", text: "Digitally signed Windows and macOS builds." },
+        { tag: "BROKER", text: "Additional broker integrations." },
+        { tag: "LAB", text: "Expanded AI Research LAB capabilities." },
+        { tag: "SPEED", text: "Faster execution, lower-latency voice." }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
