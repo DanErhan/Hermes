@@ -208,15 +208,26 @@ document.getElementById("reqForm").addEventListener("submit",function(e){
   e.preventDefault();
   var em=(document.getElementById("reqEmail").value||"").trim();
   if(!em)return;
-  try{
-    fetch("https://hermes-licence-production.up.railway.app/interest",{
-      method:"POST",
-      headers:{"Content-Type":"text/plain"},
-      body:JSON.stringify({email:em,source:"pricing-commercial"})
-    }).catch(function(){});
-  }catch(_){}
-  document.getElementById("reqWrap").innerHTML=
-    '<div class="done">✓ Noted. You\'ll hear from the desk — once, when your access opens.</div>';
+  var wrap=document.getElementById("reqWrap");
+  var btn=document.querySelector("#reqForm button");
+  btn.disabled=true; btn.textContent="Sending…";
+  // Truth over fluency: the form only says "noted" when the desk actually
+  // took the note. A swallowed failure once told visitors they were on the
+  // list while the endpoint was down and every lead was lost.
+  fetch("https://hermes-licence-production.up.railway.app/interest",{
+    method:"POST",
+    headers:{"Content-Type":"text/plain"},
+    body:JSON.stringify({email:em,source:"pricing-commercial"})
+  }).then(function(r){
+    if(!r.ok) throw new Error("http "+r.status);
+    wrap.innerHTML='<div class="done">✓ Noted. You\'ll hear from the desk — once, when your access opens.</div>';
+  }).catch(function(){
+    btn.disabled=false; btn.textContent="Request access";
+    var n=document.getElementById("reqNote");
+    if(!n){n=document.createElement("div");n.id="reqNote";n.className="note";wrap.appendChild(n);}
+    n.style.color="#e2607c";
+    n.textContent="The desk didn't answer just now — nothing was recorded. Try again in a minute, or reach us on Discord.";
+  });
 });
 </script>
 </body>
