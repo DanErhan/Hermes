@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hermes — Pricing</title>
+<meta name="description" content="Hermes pricing: €490 one-time commercial licence, free access for verified FXC Academy members, and a free beta you can run today. Your broker, your keys, your machine.">
+<link rel="icon" type="image/png" href="assets/hermes-emblem.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#06070b;--ink:#e9f1f7;--dim:#8aa0b3;--faint:#54687a;
+--gold:#c9a35c;--gold-hi:#e2c07e;--cyan:#6fd3e6;--green:#3fd6a0;--red:#e2607c;
+--line:rgba(148,197,233,.16);--panel:rgba(255,255,255,.035);
+--sans:'Instrument Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--cyan);text-decoration:none}a:hover{color:var(--gold-hi)}
+::selection{background:rgba(201,163,92,.28)}
+nav{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;align-items:center;justify-content:space-between;
+padding:20px 38px;background:linear-gradient(180deg,rgba(6,7,11,.92),rgba(6,7,11,.55) 70%,transparent);backdrop-filter:blur(8px)}
+.wordmark{font-family:'Cinzel',serif;font-weight:500;font-size:15px;letter-spacing:.5em;color:#dcc9a0}
+.navlinks{display:flex;gap:26px;align-items:center;font-family:var(--mono);font-size:10px;letter-spacing:.26em}
+.navlinks a{color:var(--dim)}.navlinks a:hover,.navlinks a.here{color:var(--gold-hi)}
+main{max-width:1020px;margin:0 auto;padding:150px 32px 90px}
+.idx{font-family:var(--mono);font-size:10px;letter-spacing:.5em;color:var(--cyan);margin-bottom:18px}
+h1{font-size:clamp(34px,6vw,56px);line-height:1.05;font-weight:600;letter-spacing:-.02em;margin-bottom:22px;text-wrap:balance}
+.lede{font-size:17px;line-height:1.7;color:var(--dim);max-width:620px;text-wrap:pretty}
+.cards{display:grid;gap:16px;margin-top:56px}
+@media(min-width:860px){.cards{grid-template-columns:1.15fr 1fr 1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:30px;display:flex;flex-direction:column}
+.card.flag{border-color:rgba(201,163,92,.45);box-shadow:0 0 60px rgba(201,163,92,.07)}
+.tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.26em;color:var(--cyan);margin-bottom:14px}
+.card.flag .tag{color:var(--gold-hi)}
+.price{font-size:40px;font-weight:600;letter-spacing:-.02em}
+.price small{font-size:14px;color:var(--faint);font-weight:400;letter-spacing:0}
+.card ul{list-style:none;margin:22px 0 26px;flex:1}
+.card li{font-size:13.5px;line-height:2;color:var(--dim)}
+.card li::before{content:"·  ";color:var(--gold);font-family:var(--mono)}
+.btn{display:block;text-align:center;font-size:14px;font-weight:600;border-radius:12px;padding:14px 20px}
+.btn.gold{color:#0b0c10;background:linear-gradient(160deg,#e2c07e,#c9a35c 55%,#9c7433);box-shadow:0 0 34px rgba(201,163,92,.25)}
+.btn.gold:hover{filter:brightness(1.12);color:#0b0c10}
+.btn.ghost{color:var(--ink);border:1px solid var(--line)}
+.btn.ghost:hover{border-color:var(--gold-hi);color:var(--gold-hi)}
+form.req{display:flex;gap:10px;margin-top:10px}
+form.req input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;
+padding:13px 16px;font-size:14px;color:var(--ink);font-family:var(--sans);outline:none;min-width:0}
+form.req input:focus{border-color:var(--gold-hi)}
+form.req button{font-size:13px;font-weight:600;color:#0b0c10;background:linear-gradient(160deg,#e2c07e,#c9a35c 55%,#9c7433);
+border:none;border-radius:12px;padding:13px 18px;cursor:pointer;font-family:var(--sans)}
+form.req button:hover{filter:brightness(1.12)}
+.done{font-family:var(--mono);font-size:12px;color:var(--green);padding:14px 4px}
+.note{font-size:11.5px;color:var(--faint);margin-top:12px;line-height:1.6}
+.strip{margin-top:70px;border:1px solid var(--line);border-radius:16px;padding:26px 28px;background:var(--panel)}
+.strip h3{font-size:14px;font-weight:600;letter-spacing:.04em;margin-bottom:14px}
+.strip .row{display:grid;gap:12px}
+@media(min-width:720px){.strip .row{grid-template-columns:1fr 1fr 1fr}}
+.strip p{font-size:13px;line-height:1.65;color:var(--dim)}
+.strip b{color:var(--ink);font-weight:600}
+.faq{margin-top:90px}
+.faq h2{font-size:clamp(24px,4vw,34px);font-weight:600;letter-spacing:-.02em;margin-bottom:26px}
+details{border-bottom:1px solid var(--line);padding:18px 4px}
+summary{cursor:pointer;font-size:15px;font-weight:500;list-style:none;display:flex;justify-content:space-between;gap:16px}
+summary::after{content:"+";color:var(--gold);font-family:var(--mono)}
+details[open] summary::after{content:"–"}
+details p{margin-top:12px;font-size:14px;line-height:1.7;color:var(--dim);max-width:720px}
+.legal{margin-top:70px;font-size:11.5px;line-height:1.7;color:var(--faint);max-width:720px}
+footer{display:flex;gap:26px;justify-content:center;font-family:var(--mono);font-size:10px;
+letter-spacing:.22em;padding:60px 20px 40px}
+footer a{color:var(--dim)}footer a:hover{color:var(--gold-hi)}footer span{color:var(--faint)}
+</style>
+</head>
+<body>
+<nav>
+  <a href="./" class="wordmark" style="color:#dcc9a0">HERMES</a>
+  <div class="navlinks">
+    <a href="product.html">PRODUCT</a>
+    <a href="pricing.html" class="here">PRICING</a>
+  </div>
+</nav>
+
+<main>
+  <header>
+    <div class="idx">PRICING</div>
+    <h1>One licence. Your machine.<br>Your account. Your keys.</h1>
+    <p class="lede">Hermes is software you own and run — not a signal service, not a
+    managed account, not a subscription trap. It trades your broker account on your
+    hardware, and your data never leaves your desk.</p>
+  </header>
+
+  <div class="cards">
+    <div class="card flag">
+      <div class="tag">COMMERCIAL LICENCE</div>
+      <div class="price">€490 <small>one-time</small></div>
+      <ul>
+        <li>Hermes Desktop for macOS &amp; Windows</li>
+        <li>Full system: entry gate, protection, execution intelligence, journal, voice, autonomy modes</li>
+        <li>Licence for 2 machines, activation in minutes</li>
+        <li>All 1.x updates included</li>
+        <li>Your broker connection, encrypted on your machine</li>
+      </ul>
+      <div id="reqWrap">
+        <form class="req" id="reqForm">
+          <input type="email" id="reqEmail" required placeholder="you@yourdesk.com">
+          <button type="submit">Request access</button>
+        </form>
+        <div class="note">Purchases are opening in stages. Leave your email and you'll
+        be invited in order — no spam, one message.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="tag" style="color:var(--green)">FXC ACADEMY MEMBERS</div>
+      <div class="price">Free <small>with membership</small></div>
+      <ul>
+        <li>The same commercial-grade Hermes</li>
+        <li>Access through FXC member verification</li>
+        <li>No payment — membership is the licence</li>
+      </ul>
+      <a class="btn ghost" href="https://discord.gg/QQGWCb4Bv" target="_blank" rel="noopener">FXC on Discord →</a>
+      <div class="note">Member verification opens alongside commercial access.</div>
+    </div>
+
+    <div class="card">
+      <div class="tag">TRY IT TODAY</div>
+      <div class="price">Beta <small>free · 11 days</small></div>
+      <ul>
+        <li>The full system, time-limited</li>
+        <li>Runs against a demo account safely</li>
+        <li>No card, no commitment</li>
+      </ul>
+      <a class="btn gold" href="https://github.com/DanErhan/Hermes-Releases/releases/latest" target="_blank" rel="noopener">Download beta ↓</a>
+      <div class="note">Unsigned beta build — the first-run warning means
+      “unknown publisher”, not “something wrong”.</div>
+    </div>
+  </div>
+
+  <div class="strip">
+    <h3>WHAT YOU BRING — AND WHY THAT'S THE POINT</h3>
+    <div class="row">
+      <p><b>Your broker account.</b> Hermes connects to your own cTrader account, demo or
+      live. It never holds your funds and there is nothing custodial anywhere in the
+      system.</p>
+      <p><b>Your AI keys.</b> Voice and reasoning run on your own provider accounts
+      (Anthropic, Google, ElevenLabs) — your usage, your control, no metered middleman.
+      Skip them and the core system still works.</p>
+      <p><b>Your machine.</b> Journal, credentials, memory and configuration live
+      encrypted on your hardware. The licence server sees an email and an anonymous
+      machine hash — never your trades, never your keys.</p>
+    </div>
+  </div>
+
+  <div class="faq">
+    <h2>Questions a careful buyer asks.</h2>
+    <details>
+      <summary>Is this a signal service or a managed account?</summary>
+      <p>Neither. Hermes is software that runs on your machine against your own broker
+      account. Nobody trades for you, nobody pools funds, and no signals are sent to
+      anyone. You configure the risk envelope; Hermes operates inside it.</p>
+    </details>
+    <details>
+      <summary>What win rate should I expect?</summary>
+      <p>Hermes doesn't promise one — and treats systems that do as a warning sign.
+      Its discipline is structural: evidence-gated entries, clocked position protection,
+      and execution review that only claims improvement when out-of-sample data shows it.
+      Trading involves real risk of loss, with or without good software.</p>
+    </details>
+    <details>
+      <summary>Does my trading data leave my machine?</summary>
+      <p>No. The journal, broker credentials and API keys are stored encrypted on your
+      hardware, keyed through your OS keychain. The licence server receives your email
+      and a salted machine fingerprint for activation — it never sees trades, balances
+      or keys.</p>
+    </details>
+    <details>
+      <summary>What happens if I'm offline?</summary>
+      <p>Hermes keeps working through a built-in offline grace window. The licence
+      refreshes itself when you're back online; a normal internet outage never locks
+      you out of your own desk.</p>
+    </details>
+    <details>
+      <summary>Can I move Hermes to a new computer?</summary>
+      <p>Yes — the licence covers two machines, and support can release a machine slot
+      if you replace hardware.</p>
+    </details>
+    <details>
+      <summary>Which brokers work?</summary>
+      <p>cTrader today (demo and live), with MetaTrader support in active development.
+      If your broker offers cTrader, Hermes can trade it.</p>
+    </details>
+  </div>
+
+  <p class="legal">Hermes is trading software, not investment advice, and past
+  performance — the system's or yours — does not guarantee future results. Trading
+  leveraged products carries a real risk of loss; never trade money you cannot afford
+  to lose. You remain responsible for your account, your configuration and your risk.</p>
+</main>
+
+<footer>
+  <a href="./">HOME</a>
+  <a href="product.html">PRODUCT</a>
+  <a href="https://discord.gg/QQGWCb4Bv" target="_blank" rel="noopener">DISCORD</a>
+  <span>© 2026 DAN ERHAN</span>
+</footer>
+
+<script>
+document.getElementById("reqForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  var em=(document.getElementById("reqEmail").value||"").trim();
+  if(!em)return;
+  try{
+    fetch("https://hermes-licence-production.up.railway.app/interest",{
+      method:"POST",
+      headers:{"Content-Type":"text/plain"},
+      body:JSON.stringify({email:em,source:"pricing-commercial"})
+    }).catch(function(){});
+  }catch(_){}
+  document.getElementById("reqWrap").innerHTML=
+    '<div class="done">✓ Noted. You\'ll hear from the desk — once, when your access opens.</div>';
+});
+</script>
+</body>
+</html>
