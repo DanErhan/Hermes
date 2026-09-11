@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hermes — Pricing</title>
-<meta name="description" content="Hermes pricing: €490 one-time commercial licence, free access for verified FXC Academy members, and a free beta you can run today. Your broker, your keys, your machine.">
+<meta name="description" content="Hermes pricing: try the full system free for 2 days, or buy it outright for €490 — one licence, your machine, your broker account, your keys.">
 <link rel="icon" type="image/png" href="assets/hermes-emblem.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
@@ -26,31 +26,30 @@ main{max-width:1020px;margin:0 auto;padding:150px 32px 90px}
 .idx{font-family:var(--mono);font-size:10px;letter-spacing:.5em;color:var(--cyan);margin-bottom:18px}
 h1{font-size:clamp(34px,6vw,56px);line-height:1.05;font-weight:600;letter-spacing:-.02em;margin-bottom:22px;text-wrap:balance}
 .lede{font-size:17px;line-height:1.7;color:var(--dim);max-width:620px;text-wrap:pretty}
-.cards{display:grid;gap:16px;margin-top:56px}
-@media(min-width:860px){.cards{grid-template-columns:1.15fr 1fr 1fr}}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:30px;display:flex;flex-direction:column}
+.cards{display:grid;gap:18px;margin-top:56px}
+@media(min-width:800px){.cards{grid-template-columns:1fr 1.2fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:32px;display:flex;flex-direction:column}
 .card.flag{border-color:rgba(201,163,92,.45);box-shadow:0 0 60px rgba(201,163,92,.07)}
 .tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.26em;color:var(--cyan);margin-bottom:14px}
 .card.flag .tag{color:var(--gold-hi)}
-.price{font-size:40px;font-weight:600;letter-spacing:-.02em}
+.price{font-size:44px;font-weight:600;letter-spacing:-.02em}
 .price small{font-size:14px;color:var(--faint);font-weight:400;letter-spacing:0}
 .card ul{list-style:none;margin:22px 0 26px;flex:1}
 .card li{font-size:13.5px;line-height:2;color:var(--dim)}
 .card li::before{content:"·  ";color:var(--gold);font-family:var(--mono)}
-.btn{display:block;text-align:center;font-size:14px;font-weight:600;border-radius:12px;padding:14px 20px}
+.btn{display:block;text-align:center;font-size:14px;font-weight:600;border-radius:12px;padding:14px 20px;cursor:pointer;border:none;font-family:var(--sans)}
 .btn.gold{color:#0b0c10;background:linear-gradient(160deg,#e2c07e,#c9a35c 55%,#9c7433);box-shadow:0 0 34px rgba(201,163,92,.25)}
 .btn.gold:hover{filter:brightness(1.12);color:#0b0c10}
-.btn.ghost{color:var(--ink);border:1px solid var(--line)}
+.btn.ghost{color:var(--ink);border:1px solid var(--line);background:transparent}
 .btn.ghost:hover{border-color:var(--gold-hi);color:var(--gold-hi)}
-form.req{display:flex;gap:10px;margin-top:10px}
-form.req input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;
+form.buy{display:flex;gap:10px;margin-top:6px}
+form.buy input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;
 padding:13px 16px;font-size:14px;color:var(--ink);font-family:var(--sans);outline:none;min-width:0}
-form.req input:focus{border-color:var(--gold-hi)}
-form.req button{font-size:13px;font-weight:600;color:#0b0c10;background:linear-gradient(160deg,#e2c07e,#c9a35c 55%,#9c7433);
-border:none;border-radius:12px;padding:13px 18px;cursor:pointer;font-family:var(--sans)}
-form.req button:hover{filter:brightness(1.12)}
-.done{font-family:var(--mono);font-size:12px;color:var(--green);padding:14px 4px}
+form.buy input:focus{border-color:var(--gold-hi)}
+form.buy .btn{padding:13px 22px;white-space:nowrap}
 .note{font-size:11.5px;color:var(--faint);margin-top:12px;line-height:1.6}
+.secure{display:flex;gap:14px;align-items:center;margin-top:14px;font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;color:var(--faint)}
+.secure span::before{content:"◆ ";color:var(--gold)}
 .strip{margin-top:70px;border:1px solid var(--line);border-radius:16px;padding:26px 28px;background:var(--panel)}
 .strip h3{font-size:14px;font-weight:600;letter-spacing:.04em;margin-bottom:14px}
 .strip .row{display:grid;gap:12px}
@@ -84,54 +83,43 @@ footer a{color:var(--dim)}footer a:hover{color:var(--gold-hi)}footer span{color:
     <div class="idx">PRICING</div>
     <h1>One licence. Your machine.<br>Your account. Your keys.</h1>
     <p class="lede">Hermes is software you own and run — not a signal service, not a
-    managed account, not a subscription trap. It trades your broker account on your
+    managed account, not a subscription. It trades your broker account on your
     hardware, and your data never leaves your desk.</p>
   </header>
 
   <div class="cards">
+    <div class="card">
+      <div class="tag">TRY IT FIRST</div>
+      <div class="price">2 days <small>free · the full system</small></div>
+      <ul>
+        <li>Everything Hermes does — nothing held back</li>
+        <li>Runs safely against a demo account</li>
+        <li>Install, enter your email, start. No card.</li>
+        <li>Buy at any point to keep your desk running</li>
+      </ul>
+      <a class="btn ghost" href="https://github.com/DanErhan/Hermes-Releases/releases/latest" target="_blank" rel="noopener">Download for macOS / Windows ↓</a>
+      <div class="note">Unsigned build — the first-run warning means “unknown
+      publisher”, not “something wrong”. Right-click → Open on macOS; More info →
+      Run anyway on Windows.</div>
+    </div>
+
     <div class="card flag">
-      <div class="tag">COMMERCIAL LICENCE</div>
-      <div class="price">€490 <small>one-time</small></div>
+      <div class="tag">OWN IT</div>
+      <div class="price">€490 <small>one-time · no subscription</small></div>
       <ul>
         <li>Hermes Desktop for macOS &amp; Windows</li>
-        <li>Full system: entry gate, protection, execution intelligence, journal, voice, autonomy modes</li>
+        <li>Entry gate, clocked protection, execution intelligence, journal, voice, autonomy modes</li>
         <li>Licence for 2 machines, activation in minutes</li>
         <li>All 1.x updates included</li>
         <li>Your broker connection, encrypted on your machine</li>
       </ul>
-      <div id="reqWrap">
-        <form class="req" id="reqForm">
-          <input type="email" id="reqEmail" required placeholder="you@yourdesk.com">
-          <button type="submit">Request access</button>
-        </form>
-        <div class="note">Purchases are opening in stages. Leave your email and you'll
-        be invited in order — no spam, one message.</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="tag" style="color:var(--green)">FXC ACADEMY MEMBERS</div>
-      <div class="price">Free <small>with membership</small></div>
-      <ul>
-        <li>The same commercial-grade Hermes</li>
-        <li>Access through FXC member verification</li>
-        <li>No payment — membership is the licence</li>
-      </ul>
-      <a class="btn ghost" href="https://discord.gg/QQGWCb4Bv" target="_blank" rel="noopener">FXC on Discord →</a>
-      <div class="note">Member verification opens alongside commercial access.</div>
-    </div>
-
-    <div class="card">
-      <div class="tag">TRY IT TODAY</div>
-      <div class="price">Beta <small>free · 11 days</small></div>
-      <ul>
-        <li>The full system, time-limited</li>
-        <li>Runs against a demo account safely</li>
-        <li>No card, no commitment</li>
-      </ul>
-      <a class="btn gold" href="https://github.com/DanErhan/Hermes-Releases/releases/latest" target="_blank" rel="noopener">Download beta ↓</a>
-      <div class="note">Unsigned beta build — the first-run warning means
-      “unknown publisher”, not “something wrong”.</div>
+      <form class="buy" id="buyForm" method="POST" action="https://hermes-licence-production.up.railway.app/checkout">
+        <input type="email" name="email" id="buyEmail" required placeholder="you@yourdesk.com" autocomplete="email">
+        <button type="submit" class="btn gold" id="buyBtn">Buy now →</button>
+      </form>
+      <div class="secure"><span>SECURE CARD PAYMENT</span><span>CODE BY EMAIL IN MINUTES</span></div>
+      <div class="note" id="buyNote">You'll be taken to a secure checkout. The moment payment
+      clears, your activation code is emailed to this address.</div>
     </div>
   </div>
 
@@ -157,6 +145,13 @@ footer a{color:var(--dim)}footer a:hover{color:var(--gold-hi)}footer span{color:
       <p>Neither. Hermes is software that runs on your machine against your own broker
       account. Nobody trades for you, nobody pools funds, and no signals are sent to
       anyone. You configure the risk envelope; Hermes operates inside it.</p>
+    </details>
+    <details>
+      <summary>What happens after I pay?</summary>
+      <p>Your activation code is emailed to you within minutes of the payment clearing.
+      Download Hermes, open it, enter the code — it binds to your machine and the full
+      system unlocks. If the email hasn't arrived in ten minutes, check spam, then
+      reach us on Discord with the address you paid with.</p>
     </details>
     <details>
       <summary>What win rate should I expect?</summary>
@@ -204,30 +199,12 @@ footer a{color:var(--dim)}footer a:hover{color:var(--gold-hi)}footer span{color:
 </footer>
 
 <script>
-document.getElementById("reqForm").addEventListener("submit",function(e){
-  e.preventDefault();
-  var em=(document.getElementById("reqEmail").value||"").trim();
-  if(!em)return;
-  var wrap=document.getElementById("reqWrap");
-  var btn=document.querySelector("#reqForm button");
-  btn.disabled=true; btn.textContent="Sending…";
-  // Truth over fluency: the form only says "noted" when the desk actually
-  // took the note. A swallowed failure once told visitors they were on the
-  // list while the endpoint was down and every lead was lost.
-  fetch("https://hermes-licence-production.up.railway.app/interest",{
-    method:"POST",
-    headers:{"Content-Type":"text/plain"},
-    body:JSON.stringify({email:em,source:"pricing-commercial"})
-  }).then(function(r){
-    if(!r.ok) throw new Error("http "+r.status);
-    wrap.innerHTML='<div class="done">✓ Noted. You\'ll hear from the desk — once, when your access opens.</div>';
-  }).catch(function(){
-    btn.disabled=false; btn.textContent="Request access";
-    var n=document.getElementById("reqNote");
-    if(!n){n=document.createElement("div");n.id="reqNote";n.className="note";wrap.appendChild(n);}
-    n.style.color="#e2607c";
-    n.textContent="The desk didn't answer just now — nothing was recorded. Try again in a minute, or reach us on Discord.";
-  });
+// The form is a plain top-level POST: the issuer answers with a redirect to
+// the secure checkout, so no cross-origin fetch is involved. If the issuer is
+// unreachable the browser shows its own error page rather than a false
+// "done" — we only disable the button to stop double submits.
+document.getElementById("buyForm").addEventListener("submit",function(){
+  var b=document.getElementById("buyBtn"); b.disabled=true; b.textContent="Opening checkout…";
 });
 </script>
 </body>

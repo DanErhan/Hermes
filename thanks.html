@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hermes — Welcome</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="assets/hermes-emblem.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#06070b;--ink:#e9f1f7;--dim:#8aa0b3;--faint:#54687a;--gold:#c9a35c;--gold-hi:#e2c07e;--cyan:#6fd3e6;--green:#3fd6a0;
+--line:rgba(148,197,233,.16);--panel:rgba(255,255,255,.035);--sans:'Instrument Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+a{color:var(--cyan);text-decoration:none}a:hover{color:var(--gold-hi)}
+nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:20px 38px}
+.wordmark{font-family:'Cinzel',serif;font-weight:500;font-size:15px;letter-spacing:.5em;color:#dcc9a0}
+main{max-width:720px;margin:0 auto;padding:170px 32px 90px}
+.idx{font-family:var(--mono);font-size:10px;letter-spacing:.5em;color:var(--green);margin-bottom:18px}
+h1{font-size:clamp(32px,5vw,48px);line-height:1.05;font-weight:600;letter-spacing:-.02em;margin-bottom:20px}
+p{font-size:16px;line-height:1.7;color:var(--dim)}
+.steps{margin:40px 0;display:grid;gap:12px}
+.step{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;display:flex;gap:16px;align-items:baseline}
+.step b{font-family:var(--mono);color:var(--gold-hi);font-size:12px;min-width:22px}
+.step div{font-size:14px;line-height:1.6;color:var(--dim)}
+.step div strong{color:var(--ink);font-weight:600}
+.btn{display:inline-block;font-size:14px;font-weight:600;color:#0b0c10;background:linear-gradient(160deg,#e2c07e,#c9a35c 55%,#9c7433);border-radius:12px;padding:14px 26px;box-shadow:0 0 34px rgba(201,163,92,.25)}
+.btn:hover{filter:brightness(1.12);color:#0b0c10}
+.note{font-size:12px;color:var(--faint);margin-top:26px;line-height:1.6}
+</style>
+</head>
+<body>
+<nav><a href="./" class="wordmark" style="color:#dcc9a0">HERMES</a></nav>
+<main>
+  <div class="idx">PAYMENT RECEIVED</div>
+  <h1>Welcome to the desk.</h1>
+  <p>Your activation code is on its way to the email you paid with — usually within a
+  minute or two. Here is everything between you and a running Hermes:</p>
+  <div class="steps">
+    <div class="step"><b>01</b><div><strong>Check your inbox</strong> for “Your Hermes licence”. The code looks like <span style="font-family:var(--mono)">A1B2-C3D4-E5F6</span>.</div></div>
+    <div class="step"><b>02</b><div><strong>Download Hermes</strong> for your computer and open it. macOS: right-click → Open the first time. Windows: More info → Run anyway.</div></div>
+    <div class="step"><b>03</b><div><strong>Enter the code</strong> on the activation screen. It binds to this machine — your licence covers two.</div></div>
+    <div class="step"><b>04</b><div><strong>Follow the setup</strong>: connect your broker, set your risk envelope, run diagnostics, start.</div></div>
+  </div>
+  <a class="btn" href="https://github.com/DanErhan/Hermes-Releases/releases/latest" target="_blank" rel="noopener">Download Hermes ↓</a>
+  <p class="note">No email after ten minutes? Check spam first, then reach us on
+  <a href="https://discord.gg/QQGWCb4Bv" target="_blank" rel="noopener">Discord</a> with the
+  address you paid with — your licence is on record either way.</p>
+</main>
+</body>
+</html>
